@@ -1,0 +1,32 @@
+# Render Blueprint: one web service (the app + API) and one PostgreSQL database.
+# Render dashboard -> New + -> Blueprint -> pick this repository.
+# Plan names below are suggestions; change them in the dashboard if Render offers different ones.
+databases:
+  - name: banday-erp-db
+    plan: basic-256mb
+    databaseName: banday_erp
+    user: banday_erp
+
+services:
+  - type: web
+    name: banday-impex-erp
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: banday-erp-db
+          property: connectionString
+      - key: ADMIN_EMAIL        # the first admin signs in with this email
+        sync: false
+      - key: ADMIN_PASSWORD     # first-time password; you must change it at first sign-in
+        generateValue: true
+      - key: SEED_DEMO          # "true" loads sample products, customers and orders on the very first start
+        value: "false"
