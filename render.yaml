@@ -3,7 +3,7 @@
 # Plan names below are suggestions; change them in the dashboard if Render offers different ones.
 databases:
   - name: banday-erp-db
-    plan: basic-256mb
+    plan: free
     databaseName: banday_erp
     user: banday_erp
 
@@ -11,7 +11,7 @@ services:
   - type: web
     name: banday-impex-erp
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install && npm run build
     startCommand: npm start
     healthCheckPath: /api/health
